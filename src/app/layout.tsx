@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "KKU Personnel Analytics Dashboard",
+  title: "KKU HR Dashboard",
   description: "ระบบ Dashboard แสดงข้อมูลบุคลากรมหาวิทยาลัยขอนแก่น",
 };
 

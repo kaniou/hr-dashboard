@@ -17,7 +17,7 @@ export async function DashboardHeader() {
           </div>
           <div>
             <h1 className="text-sm font-bold text-kku-primary">
-              KKU HR Analytics
+              KKU HR Dashboard
             </h1>
             <p className="text-[10px] text-gray-400">Dashboard</p>
           </div>

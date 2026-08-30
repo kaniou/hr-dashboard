@@ -9,7 +9,7 @@ export default function HomePage() {
           <div className="flex items-center gap-3">
             <GraduationCap className="h-8 w-8 text-kku-primary" />
             <div>
-              <h1 className="text-lg font-bold text-kku-primary">KKU HR Analytics</h1>
+              <h1 className="text-lg font-bold text-kku-primary">KKU HR Dashboard</h1>
               <p className="text-xs text-gray-500">มหาวิทยาลัยขอนแก่น</p>
             </div>
           </div>
@@ -60,7 +60,7 @@ export default function HomePage() {
       </main>
 
       <footer className="border-t bg-white py-4 text-center text-sm text-gray-500">
-        &copy; {new Date().getFullYear()} KKU Personnel Analytics Dashboard
+        &copy; {new Date().getFullYear()} KKU HR Dashboard
       </footer>
     </div>
   );
