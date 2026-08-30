@@ -39,6 +39,11 @@ export async function DashboardHeader() {
                 {session.user.faculty}
               </span>
             )}
+            {session.user.division && (
+              <span className="text-xs px-2 py-0.5 rounded-full bg-teal-100 text-teal-800">
+                {session.user.division}
+              </span>
+            )}
           </div>
 
           {session.user.role === "ADMIN" && (

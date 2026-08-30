@@ -11,6 +11,7 @@ declare module "next-auth" {
       id: string;
       role: "STAFF" | "EXECUTIVE" | "ADMIN";
       faculty: string | null;
+      division: string | null;
       provider: "kku";
     } & DefaultSession["user"];
     accessToken: string;
@@ -20,6 +21,7 @@ declare module "next-auth" {
   interface User {
     role: "STAFF" | "EXECUTIVE" | "ADMIN";
     faculty: string | null;
+    division: string | null;
   }
 }
 
@@ -28,6 +30,7 @@ declare module "next-auth/jwt" {
     id: string;
     role: "STAFF" | "EXECUTIVE" | "ADMIN";
     faculty: string | null;
+    division: string | null;
     provider: "kku";
     accessToken: string;
     expiresAt: number;
@@ -73,6 +76,7 @@ const KKUSSOProvider: OAuth2Config<Record<string, unknown>> = {
       email: String(profile.email ?? ""),
       role: mapKKURole((profile as Record<string, unknown>).role as string),
       faculty: null,
+      division: null,
     };
   },
 };
@@ -112,6 +116,7 @@ export const authConfig: NextAuthConfig = {
         token.id = user.id!;
         token.role = (user.role as "STAFF" | "EXECUTIVE" | "ADMIN") ?? "STAFF";
         token.faculty = user.faculty ?? null;
+        token.division = user.division ?? null;
         token.provider = "kku";
       }
       if (account) {
@@ -128,14 +133,14 @@ export const authConfig: NextAuthConfig = {
       let dbUser = userId
         ? await prisma.user.findUnique({
             where: { id: userId },
-            select: { id: true, role: true, faculty: true },
+            select: { id: true, role: true, faculty: true, division: true },
           })
         : null;
 
       if (!dbUser && email) {
         dbUser = await prisma.user.findUnique({
           where: { email },
-          select: { id: true, role: true, faculty: true },
+          select: { id: true, role: true, faculty: true, division: true },
         });
       }
 
@@ -144,6 +149,7 @@ export const authConfig: NextAuthConfig = {
       token.id = dbUser.id;
       token.role = dbUser.role as "STAFF" | "EXECUTIVE" | "ADMIN";
       token.faculty = dbUser.faculty;
+      token.division = dbUser.division;
       return token;
     },
 
@@ -152,6 +158,7 @@ export const authConfig: NextAuthConfig = {
         session.user.id = token.id;
         session.user.role = token.role;
         session.user.faculty = token.faculty;
+        session.user.division = token.division;
         session.user.provider = token.provider;
       }
       session.accessToken = token.accessToken;

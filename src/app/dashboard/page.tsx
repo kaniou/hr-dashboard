@@ -35,7 +35,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     redirect("/auth/signin");
   }
 
-  const { role, faculty } = session.user;
+  const { role, faculty, division } = session.user;
   const params = await searchParams;
 
   const filters: DashboardFilters = {
@@ -49,7 +49,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   };
 
   const [metrics, options] = await Promise.all([
-    getDashboardMetrics(role, faculty, filters),
+    getDashboardMetrics(role, faculty, division, filters),
     getFilterOptions(role, faculty),
   ]);
 
@@ -63,11 +63,11 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             <h2 className="text-xl font-bold text-gray-900">Dashboard ข้อมูลบุคลากร</h2>
             <p className="text-sm text-gray-500">
               {role === "STAFF" && faculty
-                ? `คณะ/หน่วยงาน: ${faculty}`
+                ? `คณะ/หน่วยงาน: ${faculty}${division ? ` | ฝ่าย: ${division}` : ""}`
                 : "ภาพรวมมหาวิทยาลัย"}
             </p>
           </div>
-          <ExportButtons role={role} faculty={faculty} />
+          <ExportButtons role={role} faculty={faculty} division={division} />
         </div>
 
         <FilterBar role={role} options={options} filters={filters} />

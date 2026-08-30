@@ -13,11 +13,12 @@ type ManagedUser = {
   email: string;
   role: Role;
   faculty: string | null;
+  division: string | null;
   createdAt: string;
   updatedAt: string;
 };
 
-type UserForm = Pick<ManagedUser, "id" | "name" | "email" | "role" | "faculty">;
+type UserForm = Pick<ManagedUser, "id" | "name" | "email" | "role" | "faculty" | "division">;
 
 const emptyForm: UserForm = {
   id: "",
@@ -25,6 +26,7 @@ const emptyForm: UserForm = {
   email: "",
   role: "STAFF",
   faculty: null,
+  division: null,
 };
 
 export function UserManagement({
@@ -45,7 +47,7 @@ export function UserManagement({
   const [pageSize, setPageSize] = useState(10);
 
   const filteredUsers = users.filter((user) => {
-    const haystack = `${user.id} ${user.name} ${user.email} ${user.faculty ?? ""}`.toLowerCase();
+    const haystack = `${user.id} ${user.name} ${user.email} ${user.faculty ?? ""} ${user.division ?? ""}`.toLowerCase();
     return haystack.includes(query.toLowerCase());
   });
 
@@ -80,6 +82,7 @@ export function UserManagement({
       email: user.email,
       role: user.role,
       faculty: user.faculty,
+      division: user.division,
     });
     setError("");
     setIsFormOpen(true);
@@ -173,7 +176,7 @@ export function UserManagement({
                 setQuery(event.target.value);
                 setPage(0);
               }}
-              placeholder="ค้นหารหัส, ชื่อ, อีเมล, คณะ"
+              placeholder="ค้นหารหัส, ชื่อ, อีเมล, คณะ, ฝ่าย"
               className="w-full rounded-lg border border-gray-200 py-2 pl-9 pr-3 text-sm outline-none transition focus:border-kku-primary focus:ring-2 focus:ring-kku-primary/20"
             />
           </div>
@@ -188,6 +191,7 @@ export function UserManagement({
                 <th className="px-4 py-3 font-medium">ชื่อ-นามสกุล</th>
                 <th className="px-4 py-3 font-medium">อีเมล</th>
                 <th className="px-4 py-3 font-medium">คณะ/หน่วยงาน</th>
+                <th className="px-4 py-3 font-medium">ฝ่าย</th>
                 <th className="px-4 py-3 font-medium">สิทธิ์</th>
                 <th className="px-4 py-3 font-medium">แก้ไขล่าสุด</th>
                 <th className="px-4 py-3 text-right font-medium">จัดการ</th>
@@ -209,6 +213,7 @@ export function UserManagement({
                   </td>
                   <td className="px-4 py-3 text-gray-600">{user.email}</td>
                   <td className="px-4 py-3 text-gray-600">{user.faculty ?? "-"}</td>
+                  <td className="px-4 py-3 text-gray-600">{user.division ?? "-"}</td>
                   <td className="px-4 py-3">
                     <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${ROLE_COLORS[user.role]}`}>
                       {ROLE_LABELS[user.role]}
@@ -246,7 +251,7 @@ export function UserManagement({
               })}
               {visibleUsers.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="px-4 py-12 text-center text-gray-500">ไม่พบผู้ใช้งาน</td>
+                  <td colSpan={8} className="px-4 py-12 text-center text-gray-500">ไม่พบผู้ใช้งาน</td>
                 </tr>
               )}
             </tbody>
@@ -287,6 +292,10 @@ export function UserManagement({
               <label className="grid gap-1.5 text-sm font-medium text-gray-700">
                 คณะ/หน่วยงาน
                 <input value={form.faculty ?? ""} onChange={(event) => setForm({ ...form, faculty: event.target.value || null })} className="rounded-lg border border-gray-200 px-3 py-2" />
+              </label>
+              <label className="grid gap-1.5 text-sm font-medium text-gray-700">
+                ฝ่าย/หน่วยงานย่อย
+                <input value={form.division ?? ""} onChange={(event) => setForm({ ...form, division: event.target.value || null })} className="rounded-lg border border-gray-200 px-3 py-2" placeholder="เว้นว่างเพื่อเห็นข้อมูลทั้งคณะ/หน่วยงาน" />
               </label>
               <label className="grid gap-1.5 text-sm font-medium text-gray-700">
                 สิทธิ์การใช้งาน

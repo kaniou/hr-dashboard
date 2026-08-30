@@ -26,6 +26,7 @@ export async function PATCH(
   const name = typeof body.name === "string" ? body.name.trim() : "";
   const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
   const faculty = typeof body.faculty === "string" ? body.faculty.trim() || null : null;
+  const division = typeof body.division === "string" ? body.division.trim() || null : null;
   const role = body.role as Role;
 
   if (!name || !email || !roles.has(role)) {
@@ -54,7 +55,7 @@ export async function PATCH(
   try {
     const user = await prisma.user.update({
       where: { id },
-      data: { name, email, role, faculty },
+      data: { name, email, role, faculty, division },
     });
 
     await prisma.auditLog.create({

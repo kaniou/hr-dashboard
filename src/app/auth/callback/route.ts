@@ -84,6 +84,7 @@ export async function GET(request: NextRequest) {
       image: null as unknown as string,
       role: user.role,
       faculty: user.faculty,
+      division: user.division,
       provider: "kku",
       accessToken,
       expiresAt: Math.floor(Date.now() / 1000) + 8 * 60 * 60,

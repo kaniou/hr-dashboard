@@ -53,6 +53,16 @@ export async function getPersonnelByFaculty(faculty: string): Promise<HRPersonne
   );
 }
 
+export async function getPersonnelByDivision(
+  faculty: string,
+  division: string
+): Promise<HRPersonnel[]> {
+  return queryHR<HRPersonnel>(
+    "SELECT * FROM KKU_HCM_TO_BI_CURRENT WHERE faculty = ? AND division = ? ORDER BY emp_id",
+    [faculty, division]
+  );
+}
+
 export async function getAllPersonnel(): Promise<HRPersonnel[]> {
   return queryHR<HRPersonnel>(
     "SELECT * FROM KKU_HCM_TO_BI_CURRENT ORDER BY emp_id"

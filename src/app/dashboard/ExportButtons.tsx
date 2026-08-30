@@ -5,9 +5,10 @@ import { ExportToolbar } from "@/components/dashboard/ExportToolbar";
 interface ExportButtonsProps {
   role: string;
   faculty: string | null;
+  division: string | null;
 }
 
-export function ExportButtons({ role, faculty }: ExportButtonsProps) {
+export function ExportButtons({ role, faculty, division }: ExportButtonsProps) {
   const download = (url: string, filename: string) => {
     const a = document.createElement("a");
     a.href = url;
@@ -20,6 +21,7 @@ export function ExportButtons({ role, faculty }: ExportButtonsProps) {
     try {
       const params = new URLSearchParams();
       if (faculty) params.set("faculty", faculty);
+      if (division) params.set("division", division);
       params.set("columns", columns.join(","));
       const res = await fetch(`/api/export/excel?${params.toString()}`);
       if (!res.ok) throw new Error("Export failed");
@@ -35,6 +37,7 @@ export function ExportButtons({ role, faculty }: ExportButtonsProps) {
     try {
       const params = new URLSearchParams();
       if (faculty) params.set("faculty", faculty);
+      if (division) params.set("division", division);
       params.set("columns", columns.join(","));
       const res = await fetch(`/api/export/pdf?${params.toString()}`);
       if (!res.ok) throw new Error("Export failed");

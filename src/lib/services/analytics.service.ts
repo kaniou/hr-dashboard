@@ -2,6 +2,7 @@ import {
   queryHR,
   getAllPersonnel,
   getPersonnelByFaculty,
+  getPersonnelByDivision,
   getPersonnelCounts,
   getPersonnelCountsByFaculty,
   getDistinctFaculties,
@@ -158,17 +159,28 @@ function computeMetrics(rows: PersonnelRow[]): DashboardMetrics {
 export async function getDashboardMetrics(
   role: string,
   faculty: string | null,
+  division: string | null,
   filters: DashboardFilters = {}
 ): Promise<DashboardMetrics> {
-  let personnel: PersonnelRow[];
-
-  if (role === "STAFF" && faculty) {
-    personnel = await getPersonnelByFaculty(faculty);
-  } else {
-    personnel = await getAllPersonnel();
-  }
+  const personnel = await getScopedPersonnel(role, faculty, division);
 
   return computeMetrics(applyFilters(personnel, filters));
+}
+
+async function getScopedPersonnel(
+  role: string,
+  faculty: string | null,
+  division: string | null
+): Promise<PersonnelRow[]> {
+  if (role === "STAFF") {
+    if (faculty && division) {
+      return getPersonnelByDivision(faculty, division);
+    }
+    if (faculty) {
+      return getPersonnelByFaculty(faculty);
+    }
+  }
+  return getAllPersonnel();
 }
 
 function applyFilters(
@@ -209,24 +221,20 @@ export async function getFilterOptions(
 
 export async function getPersonnelData(
   role: string,
-  faculty: string | null
+  faculty: string | null,
+  division: string | null
 ) {
-  if (role === "STAFF" && faculty) {
-    return getPersonnelByFaculty(faculty);
-  }
-  return getAllPersonnel();
+  return getScopedPersonnel(role, faculty, division);
 }
 
 export async function exportPersonnelData(
   role: string,
-  faculty: string | null
+  faculty: string | null,
+  division: string | null
 ) {
   if (role === "EXECUTIVE") {
     throw new Error("EXECUTIVE role cannot export data");
   }
 
-  if (role === "STAFF" && faculty) {
-    return getPersonnelByFaculty(faculty);
-  }
-  return getAllPersonnel();
+  return getScopedPersonnel(role, faculty, division);
 }

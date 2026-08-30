@@ -24,6 +24,7 @@ export async function GET() {
       email: true,
       role: true,
       faculty: true,
+      division: true,
       createdAt: true,
       updatedAt: true,
     },
@@ -43,6 +44,7 @@ export async function POST(request: NextRequest) {
   const name = typeof body.name === "string" ? body.name.trim() : "";
   const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
   const faculty = typeof body.faculty === "string" ? body.faculty.trim() || null : null;
+  const division = typeof body.division === "string" ? body.division.trim() || null : null;
   const role = body.role as Role;
 
   if (!id || !name || !email || !roles.has(role)) {
@@ -58,7 +60,7 @@ export async function POST(request: NextRequest) {
   }
 
   const user = await prisma.user.create({
-    data: { id, name, email, role, faculty },
+    data: { id, name, email, role, faculty, division },
   });
 
   await prisma.auditLog.create({

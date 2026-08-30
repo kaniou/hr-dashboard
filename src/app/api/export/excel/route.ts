@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const data = await exportPersonnelData(session.user.role, session.user.faculty);
+    const data = await exportPersonnelData(session.user.role, session.user.faculty, session.user.division);
 
     const columnsParam = request.nextUrl.searchParams.get("columns");
     const selected = columnsParam
@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
       data: {
         userId: session.user.id,
         action: "EXPORT_EXCEL",
-        metadata: { faculty: session.user.faculty, count: data.length, columns: columns.map((c) => c.key) },
+        metadata: { faculty: session.user.faculty, division: session.user.division, count: data.length, columns: columns.map((c) => c.key) },
         ipAddress: request.headers.get("x-forwarded-for") ?? "unknown",
       },
     });

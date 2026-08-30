@@ -17,6 +17,7 @@ export default async function AdminUsersPage() {
       email: true,
       role: true,
       faculty: true,
+      division: true,
       createdAt: true,
       updatedAt: true,
     },
